@@ -1,235 +1,106 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WillBoot-PRO • Aviator IA</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body { background:#050505; font-family:sans-serif; }
-  .glass { background: rgba(255,255,255,.04); backdrop-filter: blur(16px); }
-  .neon-red { box-shadow:0 0 25px rgba(220,38,38,.6); }
-  .signal { padding:1rem; border-radius:1rem; text-align:center; transition: all .3s; }
-  .signal:hover { transform:scale(1.05); }
-  .plane-icon { width:24px; height:24px; position:absolute; transform:translate(-12px,-12px); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA ELITE PRO - ANGOLA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap');
+        body { background: #050507; color: #fff; font-family: 'Inter', sans-serif; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glass { background: rgba(18, 18, 22, 0.95); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .neon { border: 1px solid rgba(219, 39, 119, 0.4); box-shadow: 0 0 25px rgba(219, 39, 119, 0.1); }
+        .chip { font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 900; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .blink { animation: pulse 1.5s infinite; }
+    </style>
 </head>
-<body class="text-white">
+<body class="p-4 min-h-screen flex flex-col items-center lg:justify-center">
 
-<!-- ========================= PÁGINA 1 - LOGIN PRINCIPAL ========================= -->
-<div id="loginMain" class="min-h-screen flex items-center justify-center">
-  <div class="glass p-10 rounded-2xl w-full max-w-md border border-red-600/30">
-    <h1 class="text-3xl font-black mb-6 text-center text-red-600">WILLBOOT-PRO</h1>
-    <input id="userMain" placeholder="Usuário" class="w-full mb-4 p-3 rounded bg-black border border-gray-700"/>
-    <input id="passMain" type="password" placeholder="Senha" class="w-full mb-6 p-3 rounded bg-black border border-gray-700"/>
-    <button onclick="loginMain()" class="w-full bg-red-600 py-3 rounded font-bold neon-red hover:bg-red-700">🔐 ENTRAR</button>
-    <p class="text-center text-sm text-gray-400 mt-6">Acesso ao Dashboard • Sistema fechado</p>
-  </div>
-</div>
-
-<!-- ========================= PÁGINA 2 - DASHBOARD ========================= -->
-<div id="dashboard" class="hidden max-w-7xl mx-auto px-6 py-10">
-
-  <!-- HEADER -->
-  <div class="glass p-6 rounded-xl flex flex-col md:flex-row justify-between items-center border border-red-600/20">
-    <div id="clockDash" class="text-red-500 font-bold"></div>
-    <div class="flex gap-4 mt-4 md:mt-0">
-      <button onclick="generateSignals('dash')" class="bg-red-600 px-6 py-3 rounded font-bold hover:bg-red-700">🔥 GERAR SINAIS</button>
-      <button onclick="logoutMain()" class="bg-gray-800 px-6 py-3 rounded font-bold hover:bg-gray-700">🚪 SAIR</button>
+    <div class="fixed top-4 right-4 flex items-center gap-2 glass px-3 py-1 rounded-full text-[10px]">
+        <span>RENDER:</span>
+        <div id="led" class="w-2 h-2 rounded-full bg-red-600 blink"></div>
     </div>
-  </div>
 
-  <!-- SINAIS -->
-  <div id="signalsDash" class="grid md:grid-cols-3 gap-6 my-10"></div>
+    <div class="w-full max-w-md lg:max-w-4xl lg:grid lg:grid-cols-2 lg:gap-6">
+        <div class="space-y-4">
+            <div class="flex justify-between glass p-5 rounded-2xl">
+                <div><p class="text-[9px] text-pink-500 font-bold uppercase">Luanda Time</p><p id="clock" class="text-xl font-orbitron">00:00:00</p></div>
+                <div class="text-right"><p class="text-[9px] text-zinc-500 font-bold uppercase">Banca Kz</p><p id="banca" class="text-xl font-bold text-green-500">---</p></div>
+            </div>
 
-  <!-- GRÁFICO -->
-  <div class="glass p-6 rounded-xl border border-red-600/20 relative">
-    <h3 class="text-center font-bold mb-4">📊 Performance IA (Histórico Real)</h3>
-    <canvas id="chartDash" height="120"></canvas>
-  </div>
+            <div class="neon bg-zinc-900/90 p-8 rounded-[32px] text-center">
+                <div id="status" class="text-[11px] font-black uppercase tracking-widest text-zinc-500 mb-2">IA AGUARDANDO</div>
+                <div id="timer" class="text-6xl font-orbitron mb-6">--:--</div>
+                <div class="text-left mb-6"><p class="text-[9px] text-zinc-400 font-bold blink">FUSO: ANGOLA (GMT+1)</p></div>
+                
+                <div class="grid grid-cols-2 gap-4 py-4 border-y border-zinc-800 mb-6">
+                    <div class="text-left"><p class="text-[9px] text-zinc-500 uppercase font-bold">Assertividade</p><p id="pct" class="text-2xl font-black text-pink-500">0%</p></div>
+                    <div class="text-right"><p class="text-[9px] text-zinc-500 uppercase font-bold">Alvo</p><p id="alvo" class="text-xl font-black italic">---</p></div>
+                </div>
 
-  <!-- LOGIN VIP ABAIXO -->
-  <div class="mt-10 text-center glass p-8 rounded-xl border border-red-600/30">
-    <h2 class="text-2xl font-black text-red-600 mb-4">💎 ACESSO VIP</h2>
-    <input id="userVIP" placeholder="Usuário VIP" class="w-1/2 mb-4 p-3 rounded bg-black border border-gray-700"/>
-    <input id="passVIP" type="password" placeholder="Senha VIP" class="w-1/2 mb-6 p-3 rounded bg-black border border-gray-700"/>
-    <button onclick="loginVIP()" class="bg-red-600 px-10 py-4 rounded-xl font-black neon-red hover:bg-red-700">🔐 ENTRAR VIP</button>
-    <p class="text-gray-300 mt-4">Sinais premium • IA adaptativa • Histórico real</p>
-  </div>
-</div>
+                <input type="file" id="file" class="hidden" accept="image/*">
+                <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800 py-4 rounded-xl mb-3 text-[10px] font-bold">1. CARREGAR PRINT</button>
+                <button onclick="analisar()" class="w-full bg-pink-600 py-5 rounded-xl text-lg font-black shadow-lg">2. GERAR SINAL</button>
+            </div>
+        </div>
 
-<!-- ========================= PÁGINA 3 - VIP ========================= -->
-<div id="vipPage" class="hidden max-w-7xl mx-auto px-6 py-10">
-
-  <!-- HEADER VIP -->
-  <div class="glass p-6 rounded-xl flex flex-col md:flex-row justify-between items-center border border-red-600/20">
-    <div id="clockVIP" class="text-red-500 font-bold"></div>
-    <div class="flex gap-4 mt-4 md:mt-0">
-      <button onclick="generateSignals('vip')" class="bg-red-600 px-6 py-3 rounded font-bold hover:bg-red-700">🔥 GERAR SINAIS VIP</button>
-      <button onclick="logoutVIP()" class="bg-gray-800 px-6 py-3 rounded font-bold hover:bg-gray-700">🚪 SAIR VIP</button>
+        <div class="space-y-4 mt-4 lg:mt-0">
+            <div class="glass p-6 rounded-2xl text-center">
+                <p class="text-[10px] font-bold text-zinc-400 uppercase mb-4">Sinal foi certeiro?</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="feedback('CERTO')" class="border border-green-600 text-green-500 py-3 rounded-xl font-bold text-sm">CERTO ✅</button>
+                    <button onclick="feedback('ERRADO')" class="border border-red-600 text-red-500 py-3 rounded-xl font-bold text-sm">ERRADO ❌</button>
+                </div>
+            </div>
+            <div class="glass p-5 rounded-2xl h-full min-h-[150px]">
+                <p class="text-[9px] text-zinc-500 font-bold mb-3 uppercase text-center tracking-tighter text-white">Histórico do Gráfico</p>
+                <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- BOTÃO UPLOAD HISTÓRICO -->
-  <div class="mt-6 glass p-6 rounded-xl border border-red-600/30 text-center">
-    <input type="file" id="aviatorImg" accept="image/*" class="mb-4"/>
-    <button onclick="analyzeImage()" class="bg-red-600 px-6 py-3 rounded font-bold neon-red hover:bg-red-700">📷 ANALISAR HISTÓRICO</button>
-    <p id="analysisResult" class="mt-4 text-green-400 font-bold"></p>
-  </div>
+    <script>
+        const API = 'https://ia-boot-elite-backend-qs3x.onrender.com';
+        
+        async function check() {
+            try { const r = await fetch(`${API}/ping`); if(r.ok) document.getElementById('led').className='w-2 h-2 rounded-full bg-green-500'; }
+            catch(e) { document.getElementById('led').className='w-2 h-2 rounded-full bg-red-600 blink'; }
+        }
+        setInterval(check, 5000);
+        setInterval(() => {
+            const opt = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            document.getElementById('clock').innerText = new Intl.DateTimeFormat('pt-PT', opt).format(new Date());
+        }, 1000);
 
-  <!-- SINAIS VIP -->
-  <div id="signalsVIP" class="grid md:grid-cols-3 gap-6 my-10"></div>
+        async function analisar() {
+            const f = document.getElementById('file').files[0];
+            if(!f) return alert("Selecione o print!");
+            document.getElementById('status').innerText = "IA ANALISANDO...";
+            const fd = new FormData(); fd.append('print', f);
+            try {
+                const r = await fetch(`${API}/analisar-fluxo`, { method: 'POST', body: fd });
+                const d = await r.json();
+                document.getElementById('timer').innerText = d.timerRosa;
+                document.getElementById('pct').innerText = d.pct;
+                document.getElementById('banca').innerText = d.banca;
+                document.getElementById('alvo').innerText = d.alvo;
+                document.getElementById('status').innerText = d.status;
+                document.getElementById('status').style.color = d.cor;
+                const h = document.getElementById('hist'); h.innerHTML = '';
+                d.historico.forEach(v => {
+                    const c = document.createElement('div');
+                    c.className = `chip ${v < 2 ? 'bg-blue-600' : (v < 10 ? 'bg-purple-600' : 'bg-pink-600')}`;
+                    c.innerText = v.toFixed(2)+'x'; h.appendChild(c);
+                });
+            } catch(e) { alert("Servidor a iniciar..."); }
+        }
 
-  <!-- GRÁFICO VIP -->
-  <div class="glass p-6 rounded-xl border border-red-600/20 relative">
-    <h3 class="text-center font-bold mb-4">📊 Performance VIP (Histórico Real)</h3>
-    <canvas id="chartVIP" height="120"></canvas>
-    <img id="plane" class="plane-icon" src="https://cdn-icons-png.flaticon.com/512/252/252025.png" alt="Avião Vermelho">
-  </div>
-</div>
-
-<script>
-/* ========================= LOGIN ========================= */
-function loginMain(){
-  if(userMain.value && passMain.value){
-    localStorage.setItem("accessMain","true");
-    document.getElementById("loginMain").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    loadHistory('dash');
-  }
-}
-function logoutMain(){ localStorage.removeItem("accessMain"); location.reload(); }
-
-/* ========================= VIP ========================= */
-const VIP_USER = "William";
-const VIP_PASS = "230220";
-function loginVIP(){
-  if(userVIP.value===VIP_USER && passVIP.value===VIP_PASS){
-    localStorage.setItem("accessVIP","true");
-    document.getElementById("dashboard").classList.add("hidden");
-    document.getElementById("vipPage").classList.remove("hidden");
-    loadHistory('vip');
-  } else { alert("Usuário ou senha VIP incorretos"); }
-}
-function logoutVIP(){ localStorage.removeItem("accessVIP"); location.reload(); }
-
-/* ========================= CLOCK ========================= */
-setInterval(()=>{
-  clockDash.innerHTML = "🕐 Luanda • " + new Date().toLocaleString("pt-PT",{timeZone:"Africa/Luanda"});
-  clockVIP.innerHTML = clockDash.innerHTML;
-},1000);
-
-/* ========================= IA SINAIS ========================= */
-let historyDash = JSON.parse(localStorage.getItem("historyDash")||"[]");
-let historyVIP = JSON.parse(localStorage.getItem("historyVIP")||"[]");
-let chartDash, chartVIP;
-
-function IA(tipo, isVIP=false){
-  let mult, conf;
-  if(tipo==="azul"){ mult = (1.00 + Math.random()*0.99).toFixed(2); conf=Math.floor(65 + Math.random()*20); }
-  if(tipo==="roxo"){ mult = (2.00 + Math.random()*7.99).toFixed(2); conf=Math.floor(65 + Math.random()*25); }
-  if(tipo==="rosa"){ mult = (10 + Math.random()*400).toFixed(2); conf=isVIP? Math.floor(80 + Math.random()*19) : Math.floor(65 + Math.random()*30); }
-  return {mult, conf};
-}
-
-function generateSignals(page){
-  const tipos = [
-    {t:"AZUL",c:"cyan"},
-    {t:"ROXO",c:"purple"},
-    {t:"ROSA",c:"pink"}
-  ];
-
-  let container, hist;
-  let isVIP = page==='vip';
-
-  container = isVIP ? signalsVIP : signalsDash;
-  hist = isVIP ? historyVIP : historyDash;
-
-  container.innerHTML = tipos.map(x=>{
-    if(isVIP && x.t!=="ROSA") return ""; // VIP só ROSA
-    if(!isVIP && x.t==="ROSA") return ""; // Dashboard não mostra ROSA
-    let r = IA(x.t.toLowerCase(),isVIP);
-    hist.push(r.conf);
-    return `<div class="signal glass border border-${x.c}-500/40 text-center">
-      <h3 class="font-bold text-${x.c}-400 mb-2">SINAL ${x.t}</h3>
-      <div class="text-4xl font-black text-${x.c}-300 mb-2">×${r.mult}</div>
-      <p>Probabilidade: <b>${r.conf}%</b></p>
-    </div>`;
-  }).join("");
-
-  if(isVIP){ historyVIP = hist; localStorage.setItem("historyVIP",JSON.stringify(historyVIP)); updateChart('vip'); }
-  else { historyDash = hist; localStorage.setItem("historyDash",JSON.stringify(historyDash)); updateChart('dash'); }
-}
-
-/* ========================= CHART ========================= */
-function loadHistory(page){ updateChart(page); }
-
-function updateChart(page){
-  let hist = page==='vip'? historyVIP : historyDash;
-  if(hist.length>50) hist=hist.slice(-50);
-  if(page==='vip'){ historyVIP = hist; localStorage.setItem("historyVIP",JSON.stringify(hist)); }
-  else { historyDash = hist; localStorage.setItem("historyDash",JSON.stringify(hist)); }
-
-  const ctx = page==='vip'? chartVIPEl.getContext("2d") : chartDashEl.getContext("2d");
-  if(page==='vip' && chartVIP) chartVIP.destroy();
-  if(page!=='vip' && chartDash) chartDash.destroy();
-
-  let dataset = {
-    data: hist,
-    borderColor: "#dc2626",
-    backgroundColor:"rgba(220,38,38,.2)",
-    tension:0.4,
-    fill:true
-  };
-
-  let chartObj = new Chart(ctx,{
-    type:"line",
-    data:{ labels:hist.map((_,i)=>i+1), datasets:[dataset] },
-    options:{
-      plugins:{legend:{display:false}},
-      scales:{y:{min:60,max:100}},
-      animation:{duration:800}
-    }
-  });
-
-  if(page==='vip'){
-    chartVIP = chartObj;
-    animatePlane(chartVIP, hist);
-  } else { chartDash = chartObj; }
-}
-
-const chartDashEl = document.getElementById("chartDash");
-const chartVIPEl = document.getElementById("chartVIP");
-const planeIcon = document.getElementById("plane");
-
-/* ========================= ANIMAÇÃO AVIÃO VIP ========================= */
-function animatePlane(chart, data){
-  if(data.length===0) return;
-  let meta = chart.getDatasetMeta(0);
-  let points = meta.data;
-  let i = 0;
-  function movePlane(){
-    if(i>=points.length) return;
-    let pos = points[i].getProps(['x','y'],true);
-    planeIcon.style.left = pos.x + 'px';
-    planeIcon.style.top = pos.y + 'px';
-    i++;
-    requestAnimationFrame(movePlane);
-  }
-  movePlane();
-}
-
-/* ========================= ANALISE IMAGEM AVIATOR ========================= */
-function analyzeImage(){
-  const file = document.getElementById("aviatorImg").files[0];
-  if(!file){ alert("Escolha uma imagem primeiro"); return; }
-  // Aqui você pode integrar OCR ou backend FastAPI
-  // Simulação: gerar chance aleatória de acerto
-  let chance = (80 + Math.random()*15).toFixed(2);
-  analysisResult.innerHTML = `Chance estimada de acerto com base no histórico: ${chance}%`;
-}
-</script>
-
+        async function feedback(t) {
+            await fetch(`${API}/feedback`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({status:t}) });
+            alert("Feedback guardado!");
+        }
+    </script>
 </body>
-    </html>
+</html>
