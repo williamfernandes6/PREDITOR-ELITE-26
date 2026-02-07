@@ -3,75 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA ELITE - LUANDA</title>
+    <title>IA ELITE - PROTOCOLO LUANDA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;900&display=swap');
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; }
-        .neon-box { border: 1px solid rgba(255,0,0,0.3); box-shadow: 0 0 20px rgba(255,0,0,0.1); }
-        .chip { font-size: 10px; padding: 4px; border-radius: 4px; font-weight: 900; width: 48px; text-align: center; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700;900&display=swap');
+        body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .neon-border { border: 1px solid rgba(219, 39, 119, 0.3); box-shadow: 0 0 15px rgba(219, 39, 119, 0.1); }
+        .glass { background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .chip { font-size: 10px; padding: 5px; border-radius: 6px; font-weight: 900; min-width: 50px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body class="p-4 flex flex-col items-center min-h-screen">
     <div class="w-full max-w-md space-y-4">
-        <div class="flex justify-between bg-zinc-950 p-4 rounded-2xl border border-zinc-900">
-            <div><p class="text-[8px] text-red-600 font-bold">LUANDA</p><p id="clock" class="text-xl font-['Orbitron']">00:00:00</p></div>
-            <div class="text-right"><p class="text-[8px] text-zinc-500">BANCA</p><p id="banca" class="text-xl font-bold">Kz 0.00</p></div>
+        
+        <div class="flex justify-between items-center glass p-4 rounded-2xl border border-zinc-800">
+            <div>
+                <p class="text-[9px] text-pink-600 font-black tracking-widest uppercase">Luanda / Angola</p>
+                <p id="clock" class="text-xl font-orbitron text-white">00:00:00</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[9px] text-zinc-500 font-bold uppercase">Banca Detetada</p>
+                <p id="banca" class="text-xl font-bold text-green-500">Kz 0,00</p>
+            </div>
         </div>
 
-        <div class="bg-zinc-950 p-6 rounded-[30px] neon-box text-center">
-            <p class="text-[9px] text-zinc-500 font-bold mb-1 uppercase">Entrada Prevista</p>
-            <p id="timer" class="text-4xl font-['Orbitron'] text-red-600 mb-4">--:--:--</p>
+        <div class="glass p-6 rounded-[35px] neon-border text-center relative overflow-hidden">
+            <div id="loading-bar" class="absolute top-0 left-0 h-1 bg-pink-600 transition-all duration-500" style="width: 0%"></div>
             
-            <div class="grid grid-cols-3 gap-2 border-y border-zinc-900 py-4 mb-4">
-                <div><p class="text-[7px] text-zinc-500 uppercase">Assertividade</p><p id="pct" class="text-sm font-bold">0%</p></div>
-                <div><p class="text-[7px] text-red-600 uppercase">Alvo Progressivo</p><p id="alvo" class="text-sm font-bold">---</p></div>
-                <div><p class="text-[7px] text-zinc-500 uppercase">Tendência</p><p id="tend" class="text-sm font-bold">---</p></div>
+            <p class="text-[10px] text-zinc-500 font-black mb-1 uppercase tracking-tighter">Entrada Confirmada Para</p>
+            <p id="timer" class="text-5xl font-orbitron text-white mb-6">--:--:--</p>
+            
+            <div class="grid grid-cols-3 gap-2 border-y border-zinc-800/50 py-4 mb-6">
+                <div>
+                    <p class="text-[8px] text-zinc-500 uppercase font-bold">Assertividade</p>
+                    <p id="pct" class="text-sm font-black text-pink-500">0%</p>
+                </div>
+                <div>
+                    <p class="text-[8px] text-pink-600 uppercase font-bold">Alvo Previsto</p>
+                    <p id="alvo" class="text-sm font-black text-white">---</p>
+                </div>
+                <div>
+                    <p class="text-[8px] text-zinc-500 uppercase font-bold">Tendência</p>
+                    <p id="tend" class="text-sm font-black text-blue-400">---</p>
+                </div>
             </div>
 
-            <h2 id="status" class="text-xl font-black italic uppercase mb-6 text-zinc-800 tracking-tighter">Aguardando Análise</h2>
+            <div class="mb-6 px-2">
+                <h2 id="status" class="text-2xl font-black italic uppercase tracking-tighter text-zinc-700 leading-none mb-2">Aguardando Print</h2>
+                <p id="dica" class="text-[11px] text-zinc-400 italic font-medium leading-tight">Carregue o histórico atualizado para análise SHA-512.</p>
+            </div>
 
             <input type="file" id="file" class="hidden" accept="image/*">
-            <button onclick="document.getElementById('file').click()" class="w-full bg-white text-black font-black py-4 rounded-xl mb-3 text-xs uppercase tracking-widest">1. Selecionar Print</button>
-            <button onclick="analisar()" class="w-full bg-red-600 font-black py-5 rounded-xl text-xl shadow-lg shadow-red-900/40">2. Gerar Sinal IA</button>
+            <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-900 text-zinc-400 font-black py-4 rounded-2xl mb-3 text-[10px] uppercase tracking-widest border border-zinc-800 hover:bg-zinc-800 transition-all">1. Capturar Gráfico</button>
+            <button onclick="analisar()" class="w-full bg-pink-700 hover:bg-pink-600 text-white font-black py-5 rounded-2xl text-xl shadow-lg shadow-pink-900/20 transition-all active:scale-95">2. Gerar Sinal IA</button>
         </div>
 
-        <div id="hist" class="flex flex-wrap gap-2 justify-center bg-zinc-950 p-4 rounded-xl border border-zinc-900"></div>
+        <div class="glass p-4 rounded-2xl border border-zinc-800">
+            <p class="text-[8px] text-zinc-500 font-bold mb-3 uppercase tracking-widest">Sequência Analisada</p>
+            <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
+        </div>
     </div>
 
     <script>
-        const API = 'https://ia-elite-engine.onrender.com'; // COLOQUE SEU LINK AQUI
+        // CONFIGURAÇÃO: COLOQUE O LINK DO SEU RENDER AQUI
+        const API_URL = 'https://ia-elite-engine.onrender.com'; 
 
+        // Relógio Luanda
         setInterval(() => {
             document.getElementById('clock').innerText = new Date().toLocaleTimeString("pt-PT", {timeZone: "Africa/Luanda"});
         }, 1000);
 
         async function analisar() {
-            const f = document.getElementById('file').files[0];
-            if(!f) return alert("Suba o print do Aviator!");
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            if(!file) return alert("Por favor, selecione o print do Aviator primeiro!");
             
-            document.getElementById('status').innerText = "CALCULANDO...";
-            const fd = new FormData(); fd.append('print', f);
+            // UI State
+            document.getElementById('status').innerText = "ANALISANDO...";
+            document.getElementById('loading-bar').style.width = "50%";
+            
+            const formData = new FormData();
+            formData.append('print', file);
 
             try {
-                const r = await fetch(`${API}/analisar-fluxo`, { method: 'POST', body: fd });
-                const d = await r.json();
-
-                document.getElementById('timer').innerText = d.timerRosa;
-                document.getElementById('pct').innerText = d.pct;
-                document.getElementById('banca').innerText = d.banca;
-                document.getElementById('alvo').innerText = d.alvo;
-                document.getElementById('status').innerText = d.status;
-                document.getElementById('status').style.color = d.cor;
-                document.getElementById('tend').innerText = d.tendencia.toUpperCase();
-
-                const h = document.getElementById('hist'); h.innerHTML = '';
-                d.historico.forEach(v => {
-                    const c = document.createElement('div');
-                    c.className = `chip ${v < 2 ? 'bg-blue-700' : v < 10 ? 'bg-purple-700' : 'bg-pink-700'}`;
-                    c.innerText = v.toFixed(2)+'x'; h.appendChild(c);
+                const response = await fetch(`${API_URL}/analisar-fluxo`, {
+                    method: 'POST',
+                    body: formData
                 });
-            } catch(e) { alert("O servidor está a acordar, tente em 30 segundos."); }
+                
+                const data = await response.json();
+                
+                // Atualizar UI com dados da IA
+                document.getElementById('loading-bar').style.width = "100%";
+                document.getElementById('timer').innerText = data.timerRosa;
+                document.getElementById('pct').innerText = data.pct;
+                document.getElementById('banca').innerText = data.banca;
+                document.getElementById('alvo').innerText = data.alvo;
+                document.getElementById('status').innerText = data.status;
+                document.getElementById('status').style.color = data.cor;
+                document.getElementById('dica').innerText = data.dica;
+                document.getElementById('tend').innerText = data.pct.replace('%','') > 70 ? "PAGADOR" : "RECOLHA";
+
+                // Renderizar Histórico
+                const histDiv = document.getElementById('hist');
+                histDiv.innerHTML = '';
+                data.historico.forEach(v => {
+                    const chip = document.createElement('div');
+                    let bg = v < 2 ? 'bg-blue-600' : v < 10 ? 'bg-purple-600' : 'bg-pink-600';
+                    chip.className = `chip ${bg}`;
+                    chip.innerText = v.toFixed(2) + 'x';
+                    histDiv.appendChild(chip);
+                });
+
+                setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
+
+            } catch (error) {
+                alert("Erro ao conectar com a IA no Render. Verifique se o servidor está online.");
+                document.getElementById('status').innerText = "ERRO DE CONEXÃO";
+                document.getElementById('loading-bar').style.width = "0%";
+            }
         }
     </script>
 </body>
