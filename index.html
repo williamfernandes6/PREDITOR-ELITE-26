@@ -3,100 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA ELITE PRO - LUANDA</title>
+    <title>SUPER IA - ELITE LUANDA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap');
-        body { background: #050507; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background: #050507; color: #fff; font-family: 'Inter', sans-serif; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(18, 18, 22, 0.95); border: 1px solid rgba(255, 255, 255, 0.05); }
         .neon-pink { border: 1px solid rgba(219, 39, 119, 0.4); box-shadow: 0 0 25px rgba(219, 39, 119, 0.1); }
-        .chip { font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 900; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .animate-blink { animation: blink 1.5s infinite; }
+        .chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 900; }
     </style>
 </head>
-<body class="flex flex-col items-center p-4 min-h-screen lg:justify-center">
+<body class="flex flex-col items-center p-4 min-h-screen">
 
-    <div class="fixed top-4 right-4 flex items-center gap-2 glass px-3 py-1 rounded-full text-[9px] font-bold">
-        <span>RENDER STATUS:</span>
-        <div id="render-led" class="w-2 h-2 rounded-full bg-red-600 animate-blink"></div>
-    </div>
-
-    <div class="w-full max-w-md lg:max-w-5xl lg:grid lg:grid-cols-2 lg:gap-8">
+    <div class="w-full max-w-md space-y-4">
         
-        <div class="space-y-4">
-            <div class="flex justify-between items-center glass p-5 rounded-3xl">
-                <div>
-                    <p class="text-[9px] text-pink-600 font-black uppercase">Relógio Luanda</p>
-                    <p id="clock" class="text-xl font-orbitron">00:00:00</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-[9px] text-zinc-500 font-black uppercase">Banca Detetada</p>
-                    <p id="banca" class="text-xl font-bold text-green-500">Kz ---</p>
-                </div>
+        <div class="flex justify-between items-center glass p-5 rounded-3xl">
+            <div>
+                <p class="text-[9px] text-pink-600 font-black uppercase tracking-widest">Luanda Time</p>
+                <p id="clock" class="text-xl font-orbitron">00:00:00</p>
             </div>
-
-            <div class="glass p-4 rounded-2xl flex justify-between items-center border-l-4" id="tendencia-box" style="border-left-color: #52525b;">
-                <div>
-                    <p class="text-[10px] text-zinc-500 font-bold uppercase">Tendência Provedor</p>
-                    <p id="tendencia-txt" class="text-lg font-black italic">ANALISANDO...</p>
-                </div>
-                <div id="tendencia-led" class="w-3 h-3 rounded-full"></div>
-            </div>
-
-            <div class="neon-pink bg-zinc-900/90 p-8 rounded-[40px] text-center relative">
-                <div id="status" class="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">IA Sistema Pronta</div>
-                <div id="timer" class="text-6xl font-orbitron mb-8 tracking-tighter text-white">--:--</div>
-
-                <div class="text-left mb-6 px-2">
-                    <p class="text-[9px] text-zinc-400 font-black uppercase animate-blink">Angola (GMT+1) - Sincronizado</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mb-8 py-5 border-y border-zinc-800">
-                    <div class="text-left">
-                        <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Assertividade</p>
-                        <p id="pct" class="text-2xl font-black text-pink-500">0%</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Alvo IA</p>
-                        <p id="alvo" class="text-xl font-black text-white italic">---</p>
-                    </div>
-                </div>
-
-                <input type="file" id="file" class="hidden" accept="image/*">
-                <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800 py-4 rounded-2xl mb-3 text-[10px] font-bold uppercase">1. Selecionar Print</button>
-                <button onclick="analisar()" class="w-full bg-pink-600 py-5 rounded-2xl text-xl font-black shadow-xl active:scale-95 transition-all">2. Gerar Previsão</button>
+            <div class="text-right">
+                <p class="text-[9px] text-zinc-500 font-black uppercase tracking-widest">Banca Detetada</p>
+                <p id="banca" class="text-xl font-bold text-green-500">Aguardando...</p>
             </div>
         </div>
 
-        <div class="space-y-4 mt-4 lg:mt-0">
-            <div class="glass p-6 rounded-3xl text-center">
-                <p class="text-[10px] font-black text-zinc-400 uppercase mb-4 tracking-widest">O Sinal anterior foi Assertivo?</p>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="feedback('CERTO')" class="bg-green-600/20 border border-green-600 text-green-500 py-3 rounded-xl font-black hover:bg-green-600 hover:text-white transition-all">SINAL CERTO ✅</button>
-                    <button onclick="feedback('ERRADO')" class="bg-red-600/20 border border-red-600 text-red-500 py-3 rounded-xl font-black hover:bg-red-600 hover:text-white transition-all">SINAL ERRADO ❌</button>
+        <div class="glass p-4 rounded-2xl flex justify-between items-center border-l-4" id="tendencia-box" style="border-left-color: #52525b;">
+            <div>
+                <p class="text-[10px] text-zinc-500 font-bold uppercase">Tendência do Provedor</p>
+                <p id="tendencia-txt" class="text-lg font-black tracking-tighter italic">ANALISANDO...</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] text-zinc-500 font-bold uppercase">Estado IA</p>
+                <div id="tendencia-led" class="w-3 h-3 rounded-full ml-auto animate-pulse" style="background: #52525b;"></div>
+            </div>
+        </div>
+
+        <div class="neon-pink bg-zinc-900/90 p-8 rounded-[40px] text-center relative">
+            <div id="status" class="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-2">IA Sistema Pronta</div>
+            <div id="timer" class="text-6xl font-orbitron mb-8 tracking-tighter text-white">--:--</div>
+
+            <div class="grid grid-cols-2 gap-4 mb-8 py-5 border-y border-zinc-800">
+                <div class="text-left">
+                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Assertividade</p>
+                    <p id="pct" class="text-2xl font-black text-pink-500">0%</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Alvo IA</p>
+                    <p id="alvo" class="text-xl font-black text-white italic">---</p>
                 </div>
             </div>
 
-            <div class="glass p-5 rounded-3xl h-full min-h-[200px]">
-                <p class="text-[9px] text-zinc-500 font-black mb-4 uppercase tracking-widest text-center">Fluxo Analisado pela IA</p>
-                <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
-            </div>
+            <p id="dica" class="text-[11px] text-zinc-400 font-medium italic mb-8">"Carregue o histórico atualizado para ler os Gaps e Tendência."</p>
+
+            <input type="file" id="file" class="hidden" accept="image/*">
+            <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold py-4 rounded-2xl mb-3 text-[11px] uppercase tracking-widest transition-all">
+                1. Selecionar Print
+            </button>
+            
+            <button onclick="analisar()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-black py-5 rounded-2xl text-xl shadow-xl shadow-pink-900/20 active:scale-95 transition-all">
+                2. Gerar Previsão Super IA
+            </button>
+        </div>
+
+        <div class="glass p-5 rounded-3xl">
+            <p class="text-[9px] text-zinc-500 font-black mb-4 uppercase">Análise de Fluxo Recente</p>
+            <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com';
-
-        async function checkStatus() {
-            const led = document.getElementById('render-led');
-            try {
-                const r = await fetch(`${API_URL}/ping`);
-                if(r.ok) { led.className = 'w-2 h-2 rounded-full bg-green-500'; }
-            } catch(e) { led.className = 'w-2 h-2 rounded-full bg-red-600 animate-blink'; }
-        }
-        setInterval(checkStatus, 5000);
+        const API_URL = 'https://ia-boot-elite-backend-qs3x.onrender.com';
 
         setInterval(() => {
             const opt = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
@@ -105,25 +83,31 @@
 
         async function analisar() {
             const file = document.getElementById('file').files[0];
-            if (!file) return alert("Selecione o print!");
-            document.getElementById('status').innerText = "IA ANALISANDO...";
+            if (!file) return alert("Selecione a imagem do Aviator!");
+
+            document.getElementById('status').innerText = "CALCULANDO GAPS...";
             const formData = new FormData();
             formData.append('print', file);
+
             try {
                 const response = await fetch(`${API_URL}/analisar-fluxo`, { method: 'POST', body: formData });
                 const data = await response.json();
 
+                // Atualizar Tendência
                 document.getElementById('tendencia-txt').innerText = data.tendencia;
                 document.getElementById('tendencia-txt').style.color = data.corTendencia;
                 document.getElementById('tendencia-led').style.background = data.corTendencia;
                 document.getElementById('tendencia-box').style.borderLeftColor = data.corTendencia;
 
-                document.getElementById('timer').innerText = data.timerRosa.split(':')[0] + ":" + data.timerRosa.split(':')[1];
+                // Dados Gerais
+                const t = data.timerRosa.split(':');
+                document.getElementById('timer').innerText = `${t[0]}:${t[1]}`;
                 document.getElementById('pct').innerText = data.pct;
                 document.getElementById('banca').innerText = data.banca;
                 document.getElementById('alvo').innerText = data.alvo;
                 document.getElementById('status').innerText = data.status;
                 document.getElementById('status').style.color = data.cor;
+                document.getElementById('dica').innerText = `"${data.dica}"`;
 
                 const histDiv = document.getElementById('hist');
                 histDiv.innerHTML = '';
@@ -134,16 +118,9 @@
                     chip.innerText = v.toFixed(2) + 'x';
                     histDiv.appendChild(chip);
                 });
-            } catch (error) { alert("Render a acordar..."); }
-        }
-
-        async function feedback(tipo) {
-            await fetch(`${API_URL}/feedback`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ status: tipo })
-            });
-            alert("Feedback Guardado!");
+            } catch (error) {
+                alert("Erro ao conectar à IA. Verifique se o Render está LIVE.");
+            }
         }
     </script>
 </body>
