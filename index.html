@@ -124,17 +124,24 @@
             }
 
             // UI State - Processando
-            document.getElementById('status').innerText = "Processando Padrões...";
+            document.getElementById('status').innerText = "Acordando IA (Aguarde 50s)...";
             document.getElementById('loading-bar').style.width = "40%";
             
             const formData = new FormData();
             formData.append('print', file);
 
+            // Ajuste Inteligente: Timeout de 60 segundos para sincronizar com o Render Free
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 65000);
+
             try {
                 const response = await fetch(`${API_URL}/analisar-fluxo`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
 
                 if (!response.ok) throw new Error("Erro no servidor");
 
@@ -169,7 +176,11 @@
 
             } catch (error) {
                 console.error(error);
-                alert("Erro ao conectar à IA. Verifique se o seu backend no Render está online (Live).");
+                if (error.name === 'AbortError') {
+                    alert("A IA demorou muito a responder. Tente novamente em 10 segundos, ela já deve estar acordada.");
+                } else {
+                    alert("Erro ao conectar à IA. Verifique se o seu backend no Render está online (Live).");
+                }
                 document.getElementById('status').innerText = "ERRO DE CONEXÃO";
                 document.getElementById('loading-bar').style.width = "0%";
             }
