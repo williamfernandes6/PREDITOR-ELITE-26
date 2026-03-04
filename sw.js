@@ -1,23 +1,22 @@
-const CACHE_NAME = 'pe-av26-v4';
+const CACHE_NAME = 'pe-av26-v12';
+const ASSETS = [
+  './index.html',
+  './manifest.json'
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Faz cache apenas do index.html para não simplificar nada
-      return cache.addAll(['./index.html']);
+      return cache.addAll(ASSETS);
     })
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
       );
     })
   );
