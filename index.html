@@ -12,7 +12,7 @@
         .neon-card { background: rgba(15, 15, 18, 0.95); border: 1px solid rgba(219, 39, 119, 0.3); box-shadow: 0 0 30px rgba(219, 39, 119, 0.1); border-radius: 40px; }
         .chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 900; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         .progress-bar { height: 4px; background: #1f1f23; border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; background: #db2777; width: 0%; transition: width 0.5s ease; }
+        .progress-fill { height: 100%; background: #db2777; width: 0%; transition: width 0.8s ease; }
     </style>
 </head>
 <body class="flex flex-col items-center p-4 min-h-screen">
@@ -63,7 +63,8 @@
     </div>
 
     <script>
-        const API_URL = 'SUA_URL_DO_RENDER_AQUI'; // Substitua pelo seu link do Render
+        // LINK CONFIGURADO CONFORME SEU PRINT
+        const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com';
 
         setInterval(() => {
             const options = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
@@ -75,14 +76,24 @@
             const file = fileInput.files[0];
             if (!file) return alert("Selecione uma imagem.");
 
-            document.getElementById('status').innerText = "Acordando IA (5-10s)...";
-            document.getElementById('loading-bar').style.width = "40%";
+            document.getElementById('status').innerText = "IA ACORDANDO (Aguarde 50s)...";
+            document.getElementById('loading-bar').style.width = "60%";
             
             const formData = new FormData();
             formData.append('print', file);
 
             try {
-                const response = await fetch(`${API_URL}/analisar-fluxo`, { method: 'POST', body: formData });
+                // Timeout estendido para sincronizar com o atraso do Render Free
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 80000);
+
+                const response = await fetch(`${API_URL}/analisar-fluxo`, { 
+                    method: 'POST', 
+                    body: formData,
+                    signal: controller.signal 
+                });
+                
+                clearTimeout(timeoutId);
                 const data = await response.json();
 
                 document.getElementById('loading-bar').style.width = "100%";
@@ -107,8 +118,9 @@
                 });
                 setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
             } catch (error) {
-                alert("Erro de conexão. Verifique se o Render está Live.");
                 document.getElementById('status').innerText = "ERRO DE CONEXÃO";
+                document.getElementById('loading-bar').style.width = "0%";
+                alert("O Render está a acordar. Aguarde 10 segundos e tente o passo 2 novamente.");
             }
         }
     </script>
