@@ -3,71 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA SUPER INTELIGENTE - PROTOCOLO LUANDA</title>
+    <title>Preditor de Elite AV26</title>
     
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-          .then(() => console.log("Preditor de Elite: App Ativo"))
-          .catch(() => console.log("Erro ao ativar App"));
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Preditor de Elite: App Ativo no Escopo:', reg.scope))
+            .catch(err => console.log('Erro ao ativar App:', err));
+        });
       }
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap');
-        body { background: #08080a; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
+        
+        body { 
+            background: radial-gradient(circle at top, #1a1a1e 0%, #08080a 100%); 
+            color: #ffffff; 
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+        }
+
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .neon-card { background: rgba(15, 15, 18, 0.95); border: 1px solid rgba(219, 39, 119, 0.3); box-shadow: 0 0 30px rgba(219, 39, 119, 0.1); border-radius: 40px; }
-        .chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 900; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .progress-bar { height: 4px; background: #1f1f23; border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; background: #db2777; width: 0%; transition: width 0.8s ease; }
+
+        .glass-card {
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(219, 39, 119, 0.2);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .neon-border-pink { box-shadow: 0 0 15px rgba(219, 39, 119, 0.4); border-color: #db2777; }
+        .neon-text-green { text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #db2777 0%, #9d174d 100%);
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:active { transform: scale(0.96); }
+
+        .pulse-ia { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .chip-vela {
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
     </style>
 </head>
-<body class="flex flex-col items-center p-4 min-h-screen">
-    <div class="w-full max-w-md space-y-4">
-        <div class="flex justify-between items-center bg-zinc-900/80 p-5 rounded-3xl border border-zinc-800/50 backdrop-blur-md">
+<body class="flex justify-center p-4">
+
+    <div class="w-full max-w-md space-y-5">
+        
+        <div class="flex justify-between items-end px-2">
             <div>
-                <p class="text-[10px] text-pink-500 font-black tracking-widest uppercase">Angola / Luanda</p>
-                <p id="clock" class="text-xl font-orbitron">00:00:00</p>
+                <p class="text-[10px] text-pink-500 font-bold uppercase tracking-[3px]">Protocolo Luanda</p>
+                <h1 class="text-2xl font-orbitron tracking-tighter">AV26 ELITE</h1>
             </div>
             <div class="text-right">
-                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Banca Detetada</p>
-                <p id="banca" class="text-xl font-bold text-green-500">Kz 0,00</p>
+                <p id="clock" class="text-sm font-mono text-zinc-400">00:00:00</p>
             </div>
         </div>
 
-        <div class="neon-card p-8 text-center relative overflow-hidden">
-            <div class="progress-bar mb-6"><div id="loading-bar" class="progress-fill"></div></div>
-            <div id="status" class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">IA Sistema em Espera</div>
-            <div id="timer" class="text-6xl font-orbitron mb-8 tracking-tighter text-white">--:--</div>
+        <div class="glass-card p-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-ping"></div>
+                <span class="text-xs text-zinc-400 uppercase font-bold tracking-widest">Banca Online</span>
+            </div>
+            <span id="banca" class="text-2xl font-bold text-green-500 neon-text-green font-orbitron">Kz 0,00</span>
+        </div>
 
-            <div class="grid grid-cols-2 gap-4 mb-3 py-5 border-t border-zinc-800/60">
-                <div class="text-left">
-                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Assertividade</p>
-                    <p id="pct" class="text-2xl font-black text-pink-500">0%</p>
+        <div class="glass-card p-8 relative overflow-hidden">
+            <div class="w-full bg-zinc-900 rounded-full h-1.5 mb-8">
+                <div id="loading-bar" class="bg-pink-600 h-1.5 rounded-full transition-all duration-700" style="width: 0%"></div>
+            </div>
+
+            <div class="text-center mb-6">
+                <p id="status" class="text-[11px] font-black uppercase tracking-[0.3em] text-zinc-500 pulse-ia">IA Sistema em Espera</p>
+                <div id="timer" class="text-7xl font-orbitron my-4 tracking-tighter text-white">--:--</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 py-5 border-y border-zinc-800/50">
+                <div>
+                    <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Assertividade</p>
+                    <p id="pct" class="text-3xl font-black text-pink-500 font-orbitron">0%</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Alvo Previsto</p>
+                    <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Alvo Previsto</p>
                     <p id="alvo" class="text-xl font-black text-white italic">---</p>
                 </div>
             </div>
 
-            <div class="mb-8 py-3 border-b border-zinc-800/60">
-                <p class="text-[9px] text-pink-500/70 uppercase font-black mb-2 tracking-widest text-center">Alcance Passível / Próximas Previsões</p>
-                <div id="alcances" class="text-[11px] font-bold text-zinc-300 bg-zinc-900/50 py-2 rounded-xl border border-zinc-800/30">Aguardando análise...</div>
+            <div class="mt-6 p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800">
+                <p class="text-[9px] text-pink-500/80 uppercase font-black mb-1 text-center tracking-widest">Alcance Passível</p>
+                <div id="alcances" class="text-center font-bold text-sm text-zinc-200 italic">Aguardando Leitura...</div>
             </div>
 
-            <div class="mb-8 min-h-[40px]"><p id="dica" class="text-xs text-zinc-400 font-medium leading-relaxed italic">"Aguardando análise de ciclos SHA-512."</p></div>
-
-            <input type="file" id="file" class="hidden" accept="image/*">
-            <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 font-bold py-4 rounded-2xl mb-3 text-[11px] uppercase tracking-widest border border-zinc-700/50 transition-all">1. Selecionar Gráfico</button>
-            <button onclick="analisar()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-black py-5 rounded-2xl text-xl shadow-xl shadow-pink-900/20 active:scale-95 transition-all">2. Analisar com Super IA</button>
+            <p id="dica" class="text-[11px] text-zinc-500 text-center mt-6 italic">"Aguardando análise de ciclos SHA-512..."</p>
         </div>
 
-        <div class="bg-zinc-900/40 p-5 rounded-3xl border border-zinc-800/40">
-            <p class="text-[9px] text-zinc-500 font-black mb-4 uppercase tracking-[0.1em]">Última Sequência Lida</p>
+        <div class="space-y-3">
+            <input type="file" id="file" class="hidden" accept="image/*">
+            <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800/80 hover:bg-zinc-800 text-white font-bold py-4 rounded-2xl border border-zinc-700 transition-all uppercase text-[10px] tracking-widest">
+                1. Capturar Histórico
+            </button>
+            <button onclick="analisar()" class="w-full btn-primary text-white font-black py-5 rounded-2xl text-xl uppercase tracking-tighter active:scale-95 transition-all">
+                2. Analisar Agora
+            </button>
+        </div>
+
+        <div class="glass-card p-5">
+            <p class="text-[10px] text-zinc-500 font-black mb-4 uppercase tracking-widest">Últimas 60 Velas Analisadas</p>
             <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
         </div>
     </div>
@@ -75,10 +134,7 @@
     <script>
         const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com';
 
-        // AUTO-DESPERTAR: IA acorda ao abrir o Aplicativo
-        window.onload = () => {
-            fetch(API_URL).catch(() => {});
-        };
+        window.onload = () => { fetch(API_URL).catch(() => {}); };
 
         setInterval(() => {
             const options = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
@@ -88,52 +144,49 @@
         async function analisar() {
             const fileInput = document.getElementById('file');
             const file = fileInput.files[0];
-            if (!file) return alert("Selecione uma imagem.");
+            if (!file) return alert("Selecione a imagem do Aviator primeiro.");
 
-            document.getElementById('status').innerText = "IA PROCESSANDO (Aguarde)...";
-            document.getElementById('loading-bar').style.width = "70%";
+            document.getElementById('status').innerText = "IA ANALISANDO CICLOS...";
+            document.getElementById('loading-bar').style.width = "60%";
             
             const formData = new FormData();
             formData.append('print', file);
 
-            try {
-                // Timeout de 120s para garantir conexão no Render Free
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 120000);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 120000);
 
+            try {
                 const response = await fetch(`${API_URL}/analisar-fluxo`, { 
-                    method: 'POST', 
-                    body: formData,
-                    signal: controller.signal 
+                    method: 'POST', body: formData, signal: controller.signal 
                 });
                 
-                clearTimeout(timeoutId);
                 const data = await response.json();
-
                 document.getElementById('loading-bar').style.width = "100%";
-                const timeParts = data.timerRosa.split(':');
-                document.getElementById('timer').innerText = `${timeParts[0]}:${timeParts[1]}`;
+
+                const t = data.timerRosa.split(':');
+                document.getElementById('timer').innerText = `${t[0]}:${t[1]}`;
                 document.getElementById('pct').innerText = data.pct;
                 document.getElementById('banca').innerText = data.banca;
                 document.getElementById('alvo').innerText = data.alvo;
                 document.getElementById('status').innerText = data.status;
                 document.getElementById('status').style.color = data.cor;
                 document.getElementById('dica').innerText = `"${data.dica}"`;
-                if (data.alcances) document.getElementById('alcances').innerText = `Alcance possível: ${data.alcances}`;
+                if (data.alcances) document.getElementById('alcances').innerText = data.alcances;
 
                 const histDiv = document.getElementById('hist');
                 histDiv.innerHTML = '';
                 data.historico.forEach(v => {
                     const chip = document.createElement('div');
-                    let colorClass = v < 2 ? 'bg-blue-600' : (v < 10 ? 'bg-purple-600' : 'bg-pink-600');
-                    chip.className = `chip ${colorClass}`;
+                    let bg = v < 2 ? 'bg-blue-600' : (v < 10 ? 'bg-purple-600' : 'bg-pink-600');
+                    chip.className = `chip-vela ${bg}`;
                     chip.innerText = v.toFixed(2) + 'x';
                     histDiv.appendChild(chip);
                 });
-                setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
+
+                setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 3000);
             } catch (error) {
-                document.getElementById('status').innerText = "ESTABILIZANDO...";
-                alert("O servidor está a estabilizar o aplicativo. Tente novamente em 10 segundos.");
+                document.getElementById('status').innerText = "RECONECTANDO...";
+                alert("Aguarde 10 segundos para a IA estabilizar o sinal.");
             }
         }
     </script>
