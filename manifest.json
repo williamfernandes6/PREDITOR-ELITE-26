@@ -12,7 +12,13 @@
       "src": "https://i.ibb.co/3S4Xb4T/pe-av26-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://i.ibb.co/3S4Xb4T/pe-av26-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "https://i.ibb.co/3S4Xb4T/pe-av26-icon-512.png",
