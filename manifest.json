@@ -1,7 +1,7 @@
 {
   "name": "Preditor de Elite AV26",
   "short_name": "PE AV26",
-  "description": "IA de Alta Assertividade para Aviator - Protocolo Luanda",
+  "description": "IA de Alta Assertividade para Aviator",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#08080a",
@@ -9,22 +9,22 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://i.ibb.co/3S4Xb4T/pe-av26-icon-512.png",
+      "src": "https://i.ibb.co/v4mS889/icon-aviator-red.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://i.ibb.co/3S4Xb4T/pe-av26-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "https://i.ibb.co/3S4Xb4T/pe-av26-icon-512.png",
+      "src": "https://i.ibb.co/v4mS889/icon-aviator-red.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/v4mS889/icon-aviator-red.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
