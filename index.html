@@ -46,7 +46,7 @@
 
             <div class="mb-8 py-3 border-b border-zinc-800/60">
                 <p class="text-[9px] text-pink-500/70 uppercase font-black mb-2 tracking-widest text-center">Alcance Passível / Próximas Previsões</p>
-                <div id="alcances" class="text-[11px] font-bold text-zinc-300 bg-zinc-900/50 py-2 rounded-xl border border-zinc-800/30">Aguardando análise...</div>
+                <div id="alcances" class="text-[11px] font-bold text-zinc-300 bg-zinc-900/50 py-2 rounded-xl border border-zinc-800/30">IA está a acordar...</div>
             </div>
 
             <div class="mb-8 min-h-[40px]"><p id="dica" class="text-xs text-zinc-400 font-medium leading-relaxed italic">"Aguardando análise de ciclos SHA-512."</p></div>
@@ -63,8 +63,13 @@
     </div>
 
     <script>
-        // LINK CONFIGURADO CONFORME SEU PRINT
         const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com';
+
+        // FUNÇÃO DE DESPERTAR AUTOMÁTICO (WAKE-UP)
+        window.onload = () => {
+            console.log("Acordando o Render...");
+            fetch(API_URL).catch(e => console.log("IA já está a processar o despertar."));
+        };
 
         setInterval(() => {
             const options = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
@@ -76,16 +81,15 @@
             const file = fileInput.files[0];
             if (!file) return alert("Selecione uma imagem.");
 
-            document.getElementById('status').innerText = "IA ACORDANDO (Aguarde 50s)...";
-            document.getElementById('loading-bar').style.width = "60%";
+            document.getElementById('status').innerText = "PROCESSANDO (Aguarde)...";
+            document.getElementById('loading-bar').style.width = "70%";
             
             const formData = new FormData();
             formData.append('print', file);
 
             try {
-                // Timeout estendido para sincronizar com o atraso do Render Free
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 80000);
+                const timeoutId = setTimeout(() => controller.abort(), 90000);
 
                 const response = await fetch(`${API_URL}/analisar-fluxo`, { 
                     method: 'POST', 
@@ -118,9 +122,8 @@
                 });
                 setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
             } catch (error) {
-                document.getElementById('status').innerText = "ERRO DE CONEXÃO";
-                document.getElementById('loading-bar').style.width = "0%";
-                alert("O Render está a acordar. Aguarde 10 segundos e tente o passo 2 novamente.");
+                document.getElementById('status').innerText = "CONEXÃO INSTÁVEL";
+                alert("O servidor está a estabilizar. Tente novamente o passo 2 em 5 segundos.");
             }
         }
     </script>
