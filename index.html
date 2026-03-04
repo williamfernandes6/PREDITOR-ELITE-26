@@ -9,7 +9,9 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(err => console.log('Erro:', err));
+          navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log("Sistema de Instalação Ativo"))
+            .catch(err => console.log("Erro ao carregar App:", err));
         });
       }
     </script>
@@ -109,7 +111,15 @@
                 document.getElementById('loading-bar').style.width = "100%";
                 const timeParts = data.timerRosa.split(':');
                 document.getElementById('timer').innerText = `${timeParts[0]}:${timeParts[1]}`;
-                document.getElementById('pct').innerText = data.pct;
+                
+                // Lógica de assertividade personalizada conforme as suas instruções
+                let assertividade = parseInt(data.pct);
+                let labelAssert = data.pct;
+                if(assertividade === 100) labelAssert = "CERTEIRO";
+                else if(assertividade >= 80) labelAssert = "SINAL PROVÁVEL";
+                else labelAssert = "SINAL DE RISCO";
+                
+                document.getElementById('pct').innerText = labelAssert;
                 document.getElementById('banca').innerText = data.banca;
                 document.getElementById('alvo').innerText = data.alvo;
                 document.getElementById('status').innerText = data.status;
@@ -129,7 +139,7 @@
                 setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
             } catch (error) {
                 document.getElementById('status').innerText = "ESTABILIZANDO...";
-                alert("O servidor está a estabilizar o aplicativo. Tente novamente em 10 segundos.");
+                alert("O servidor está a estabilizar. Tente novamente em segundos.");
             }
         }
     </script>
