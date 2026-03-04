@@ -9,19 +9,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://i.ibb.co/v4mS889/icon-aviator-red.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://i.ibb.co/v4mS889/icon-aviator-red.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://i.ibb.co/v4mS889/icon-aviator-red.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
