@@ -6,6 +6,16 @@
     <title>IA SUPER INTELIGENTE - PROTOCOLO LUANDA</title>
     
     <link rel="manifest" href="./manifest.json">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log("Sistema de Instalação Ativo"))
+            .catch(err => console.log("Erro ao carregar App:", err));
+        });
+      }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap');
@@ -49,11 +59,11 @@
             <div class="grid grid-cols-2 gap-4 mb-3 py-5 border-t border-zinc-800/60">
                 <div class="text-left">
                     <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Assertividade</p>
-                    <p id="pct" class="text-2xl font-black text-pink-500 transition-colors duration-500">0%</p>
+                    <p id="pct" class="text-2xl font-black text-pink-500">0%</p>
                 </div>
                 <div class="text-right">
                     <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Alvo Previsto</p>
-                    <p id="alvo" class="text-xl font-black text-pink-500 italic transition-colors duration-500">---</p>
+                    <p id="alvo" class="text-xl font-black text-pink-500 italic">---</p>
                 </div>
             </div>
 
@@ -77,7 +87,6 @@
     </div>
 
     <script>
-        // ATENÇÃO: Substitua pelo seu link real do Render
         const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com';
         let frasesDinamicas = [];
         let intervalDica;
@@ -97,7 +106,7 @@
             }
         }
 
-        window.onload = () => { verificarServer(); setInterval(verificarServer, 20000); };
+        window.onload = () => { verificarServer(); setInterval(verificarServer, 30000); };
 
         setInterval(() => {
             const options = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
@@ -125,12 +134,7 @@
                 document.getElementById('banca').innerText = data.banca;
                 document.getElementById('alvo').innerText = data.alvo;
                 document.getElementById('status').innerText = data.status;
-                
-                // AJUSTE DINÂMICO DE CORES (Sincronizado com o Servidor)
                 document.getElementById('status').style.color = data.cor;
-                document.getElementById('pct').style.color = data.cor;
-                document.getElementById('alvo').style.color = data.cor;
-                document.getElementById('loading-bar').style.backgroundColor = data.cor;
                 
                 frasesDinamicas = data.listaDicas;
                 if(intervalDica) clearInterval(intervalDica);
