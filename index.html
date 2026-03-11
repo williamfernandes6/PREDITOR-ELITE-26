@@ -9,37 +9,43 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap');
         body { background: #08080a; color: #ffffff; font-family: 'Inter', sans-serif; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .neon-card { background: rgba(15, 15, 18, 0.95); border: 1px solid rgba(219, 39, 119, 0.3); border-radius: 40px; }
-        .progress-bar { height: 4px; background: #1f1f23; border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; background: #db2777; width: 0%; transition: width 0.8s ease; }
+        .neon-card { background: rgba(15, 15, 18, 0.95); border: 1px solid rgba(219, 39, 119, 0.3); border-radius: 40px; box-shadow: 0 0 30px rgba(219, 39, 119, 0.1); }
+        
+        /* LINHA DE PROCESSAMENTO ROSA RESTAURADA */
+        .progress-bar { height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #db2777, #f472b6); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px #db2777; }
+        
         .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         .dot-online { background: #22c55e; box-shadow: 0 0 15px #22c55e; animation: pulse 1.5s infinite; }
         .dot-offline { background: #ef4444; }
-        @keyframes pulse { 0% { opacity: 1; } 100% { opacity: 1; } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         .chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; font-weight: 900; }
     </style>
 </head>
 <body class="flex flex-col items-center p-4 min-h-screen">
     <div class="w-full max-w-md space-y-4">
-        <div class="flex justify-between items-center bg-zinc-900/80 p-5 rounded-3xl border border-zinc-800 backdrop-blur-md relative">
+        <div class="flex justify-between items-center bg-zinc-900/80 p-5 rounded-3xl border border-zinc-800 backdrop-blur-md">
             <div>
-                <p class="text-[10px] text-pink-500 font-black uppercase">Angola / Luanda</p>
+                <p class="text-[10px] text-pink-500 font-black uppercase tracking-widest">Luanda / Angola</p>
                 <p id="clock" class="text-xl font-orbitron">00:00:00</p>
             </div>
-            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+            <div class="flex flex-col items-center">
                 <div id="render-status" class="status-dot dot-offline"></div>
-                <span id="status-text" class="text-[7px] font-bold text-zinc-600 mt-1 uppercase">Render</span>
+                <span id="status-text" class="text-[7px] font-bold text-zinc-600 mt-1 uppercase">Render Status</span>
             </div>
             <div class="text-right">
-                <p class="text-[10px] text-zinc-500 font-bold uppercase">Banca ElephantBet</p>
+                <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Banca Elephant</p>
                 <p id="banca" class="text-xl font-bold text-green-500">AOA 0,00</p>
             </div>
         </div>
 
-        <div class="neon-card p-8 text-center relative">
-            <div class="progress-bar mb-6"><div id="loading-bar" class="progress-fill"></div></div>
-            <div id="status" class="text-[10px] font-black uppercase text-zinc-500 mb-2">IA em Espera</div>
-            <div id="timer" class="text-6xl font-orbitron mb-8 text-white">--:--</div>
+        <div class="neon-card p-8 text-center relative overflow-hidden">
+            <div class="progress-bar mb-6">
+                <div id="loading-bar" class="progress-fill"></div>
+            </div>
+            
+            <div id="status" class="text-[10px] font-black uppercase text-zinc-500 mb-2 tracking-[0.2em]">IA Sistema em Espera</div>
+            <div id="timer" class="text-6xl font-orbitron mb-8 text-white tracking-tighter">--:--</div>
 
             <div class="grid grid-cols-2 gap-4 mb-3 py-5 border-t border-zinc-800/60">
                 <div class="text-left">
@@ -53,25 +59,25 @@
             </div>
 
             <div class="mb-8 py-3 border-b border-zinc-800/60">
-                <p class="text-[9px] text-pink-500/70 uppercase font-black mb-2 tracking-widest text-center">Alcance Passível</p>
-                <div id="alcances" class="text-[15px] font-black text-white bg-zinc-900/50 py-3 rounded-xl border border-zinc-800/30">Aguardando análise...</div>
+                <p class="text-[9px] text-pink-500/70 uppercase font-black mb-2 tracking-widest">Alcance Passível</p>
+                <div id="alcances" class="text-[15px] font-black text-white bg-zinc-900/50 py-3 rounded-xl border border-zinc-800/30">Aguardando...</div>
             </div>
 
-            <div class="mb-8 min-h-[40px]"><p id="dica" class="text-xs text-pink-500 font-bold italic">"Analise o histórico para prever rosas."</p></div>
+            <div class="mb-8 min-h-[40px]"><p id="dica" class="text-xs text-pink-500 font-bold italic">"Selecione o gráfico da Elephant Bet para começar."</p></div>
 
             <input type="file" id="file" class="hidden" accept="image/*">
-            <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800/50 text-zinc-300 font-bold py-4 rounded-2xl mb-3 text-[11px] uppercase border border-zinc-700/50 tracking-widest">1. Selecionar Gráfico</button>
+            <button onclick="document.getElementById('file').click()" class="w-full bg-zinc-800/50 text-zinc-300 font-bold py-4 rounded-2xl mb-3 text-[11px] uppercase border border-zinc-700/50 tracking-widest hover:bg-zinc-800 transition-all">1. Selecionar Gráfico</button>
             <button id="btn-analisar" onclick="analisar()" class="w-full bg-pink-600 text-white font-black py-5 rounded-2xl text-xl shadow-xl shadow-pink-900/20 active:scale-95 transition-all">2. Analisar com Super IA</button>
         </div>
 
         <div class="bg-zinc-900/40 p-5 rounded-3xl border border-zinc-800/40">
-            <p class="text-[9px] text-zinc-500 font-black mb-4 uppercase">Última Sequência Lida</p>
+            <p class="text-[9px] text-zinc-500 font-black mb-4 uppercase tracking-[0.1em]">Última Sequência Lida</p>
             <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com'; // Coloque seu link real aqui
+        const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com'; 
 
         async function verificarServer() {
             try {
@@ -87,18 +93,29 @@
         window.onload = () => { verificarServer(); setInterval(verificarServer, 20000); };
 
         async function analisar() {
-            const file = document.getElementById('file').files[0];
-            if (!file) return alert("Selecione uma imagem.");
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            if (!file) return alert("Por favor, selecione uma imagem.");
+            
             const btn = document.getElementById('btn-analisar');
+            const bar = document.getElementById('loading-bar');
+            
             btn.disabled = true;
             document.getElementById('status').innerText = "IA PROCESSANDO...";
-            document.getElementById('loading-bar').style.width = "75%";
+            
+            // Inicia animação da linha rosa
+            bar.style.width = "40%";
+
             const formData = new FormData();
             formData.append('print', file);
+
             try {
                 const res = await fetch(`${API_URL}/analisar-fluxo`, { method: 'POST', body: formData });
+                bar.style.width = "80%";
+                
                 const data = await res.json();
-                document.getElementById('loading-bar').style.width = "100%";
+
+                bar.style.width = "100%";
                 document.getElementById('timer').innerText = data.timerRosa;
                 document.getElementById('pct').innerText = data.pct;
                 document.getElementById('banca').innerText = data.banca;
@@ -107,6 +124,7 @@
                 document.getElementById('dica').innerText = `"${data.dica}"`;
                 document.getElementById('status').innerText = data.status;
                 document.getElementById('status').style.color = data.cor;
+
                 const histDiv = document.getElementById('hist');
                 histDiv.innerHTML = '';
                 data.historico.forEach(v => {
@@ -115,8 +133,13 @@
                     chip.innerText = v.toFixed(2) + 'x';
                     histDiv.appendChild(chip);
                 });
-                setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; btn.disabled = false; }, 2000);
-            } catch (e) { alert("Erro de comunicação."); btn.disabled = false; document.getElementById('loading-bar').style.width = "0%"; }
+                
+                setTimeout(() => { bar.style.width = "0%"; btn.disabled = false; }, 2000);
+            } catch (e) { 
+                alert("Erro de comunicação."); 
+                bar.style.width = "0%";
+                btn.disabled = false;
+            }
         }
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString("pt-PT", {timeZone: "Africa/Luanda"}); }, 1000);
     </script>
