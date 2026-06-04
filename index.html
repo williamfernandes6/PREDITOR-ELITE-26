@@ -6,7 +6,7 @@
     <title>IA SUPER INTELIGENTE - PROTOCOLO LUANDA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=700&family=Inter:wght=400;700;900&display=swap');
         
         body { 
             background: #08080a; 
@@ -45,17 +45,33 @@
             width: 0%;
             transition: width 0.5s ease;
         }
+
+        /* Animação Pulsante para o Status do Servidor */
+        .pulse-status {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
     </style>
 </head>
 <body class="flex flex-col items-center p-4 min-h-screen">
 
     <div class="w-full max-w-md space-y-4">
         
-        <div class="flex justify-between items-center bg-zinc-900/80 p-5 rounded-3xl border border-zinc-800/50 backdrop-blur-md">
+        <div class="flex justify-between items-center bg-zinc-900/80 p-5 rounded-3xl border border-zinc-800/50 backdrop-blur-md relative">
             <div>
                 <p class="text-[10px] text-pink-500 font-black tracking-widest uppercase">Angola / Luanda</p>
                 <p id="clock" class="text-xl font-orbitron">00:00:00</p>
             </div>
+
+            <div class="flex flex-col items-center justify-center absolute left-1/2 -translate-x-1/2 text-center">
+                <span id="render-status-dot" class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] pulse-status mb-1"></span>
+                <span id="render-status-text" class="text-[8px] font-black uppercase tracking-wider text-red-500">OFFLINE</span>
+            </div>
+
             <div class="text-right">
                 <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Banca Detetada</p>
                 <p id="banca" class="text-xl font-bold text-green-500">Kz 0,00</p>
@@ -99,8 +115,7 @@
 
         <div class="bg-zinc-900/40 p-5 rounded-3xl border border-zinc-800/40">
             <p class="text-[9px] text-zinc-500 font-black mb-4 uppercase tracking-[0.1em]">Última Sequência Lida</p>
-            <div id="hist" class="flex flex-wrap gap-2 justify-center">
-                </div>
+            <div id="hist" class="flex flex-wrap gap-2 justify-center"></div>
         </div>
     </div>
 
@@ -113,6 +128,35 @@
             const options = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             document.getElementById('clock').innerText = new Intl.DateTimeFormat('pt-PT', options).format(new Date());
         }, 1000);
+
+        // FUNÇÃO AUTOMÁTICA: Acorda o Render assim que abre o site
+        async function acordarRender() {
+            const dot = document.getElementById('render-status-dot');
+            const text = document.getElementById('render-status-text');
+            
+            text.innerText = "ACORDANDO...";
+            text.className = "text-[8px] font-black uppercase tracking-wider text-yellow-500";
+            dot.className = "w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_10px_#eab308] pulse-status mb-1";
+
+            try {
+                // Faz uma chamada leve do tipo GET para a nova rota de saúde do servidor
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    // Se o servidor responder, fica Verde (Ativo)
+                    dot.className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] mb-1";
+                    text.innerText = "ONLINE";
+                    text.className = "text-[8px] font-black uppercase tracking-wider text-green-500";
+                }
+            } catch (error) {
+                console.error("Servidor ainda a carregar ou offline:", error);
+                dot.className = "w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] pulse-status mb-1";
+                text.innerText = "DORMINDO";
+                text.className = "text-[8px] font-black uppercase tracking-wider text-red-500";
+            }
+        }
+
+        // Executa a função imediatamente ao carregar a página
+        window.addEventListener('DOMContentLoaded', acordarRender);
 
         async function analisar() {
             const fileInput = document.getElementById('file');
@@ -152,7 +196,7 @@
                 document.getElementById('alvo').innerText = data.alvo;
                 document.getElementById('status').innerText = data.status;
                 document.getElementById('status').style.color = data.cor;
-                document.getElementById('dica').innerText = `"${data.dica}"`;
+                document.getElementById('dica').innerText = data.dica;
 
                 // Renderizar Histórico de Velas
                 const histDiv = document.getElementById('hist');
@@ -165,6 +209,11 @@
                     histDiv.appendChild(chip);
                 });
 
+                // Como a requisição funcionou, garante que o sinal permanece verde
+                document.getElementById('render-status-dot').className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] mb-1";
+                document.getElementById('render-status-text').innerText = "ONLINE";
+                document.getElementById('render-status-text').className = "text-[8px] font-black uppercase tracking-wider text-green-500";
+
                 setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
 
             } catch (error) {
@@ -172,6 +221,11 @@
                 alert("Erro ao conectar à IA. Verifique se o seu backend no Render está online (Live).");
                 document.getElementById('status').innerText = "ERRO DE CONEXÃO";
                 document.getElementById('loading-bar').style.width = "0%";
+                
+                // Em caso de erro de conexão, o sinal volta para vermelho
+                document.getElementById('render-status-dot').className = "w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] pulse-status mb-1";
+                document.getElementById('render-status-text').innerText = "DORMINDO";
+                document.getElementById('render-status-text').className = "text-[8px] font-black uppercase tracking-wider text-red-500";
             }
         }
     </script>
