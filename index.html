@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IA SUPER INTELIGENTE - PROTOCOLO LUANDA</title>
+    <link rel="manifest" href="./manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=700&family=Inter:wght=400;700;900&display=swap');
         
         body { 
-            background: #08080a; 
+            background: #0d0d11; 
             color: #ffffff; 
             font-family: 'Inter', sans-serif; 
             overflow-x: hidden;
@@ -18,9 +19,9 @@
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
 
         .neon-card { 
-            background: rgba(15, 15, 18, 0.95);
-            border: 1px solid rgba(219, 39, 119, 0.3);
-            box-shadow: 0 0 30px rgba(219, 39, 119, 0.1);
+            background: rgba(18, 18, 24, 0.98);
+            border: 1px solid rgba(234, 88, 12, 0.3);
+            box-shadow: 0 0 30px rgba(234, 88, 12, 0.05);
             border-radius: 40px;
         }
 
@@ -41,12 +42,11 @@
 
         .progress-fill {
             height: 100%;
-            background: #db2777;
+            background: #ea580c;
             width: 0%;
             transition: width 0.5s ease;
         }
 
-        /* Animação Pulsante para o Status do Servidor */
         .pulse-status {
             animation: pulse 2s infinite;
         }
@@ -54,6 +54,31 @@
             0% { transform: scale(0.95); opacity: 0.5; }
             50% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(0.95); opacity: 0.5; }
+        }
+
+        /* Cockpit de Voo do Foguetão 🚀 */
+        #radar-screen {
+            position: relative;
+            width: 100%;
+            height: 170px;
+            background: radial-gradient(circle, #1f1414 0%, #0a0505 100%);
+            border: 2px solid #441818;
+            border-radius: 28px;
+            overflow: hidden;
+        }
+        #rocket {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            font-size: 34px;
+            transform: rotate(45deg);
+            transition: transform 0.08s ease;
+            display: none;
+            z-index: 10;
+        }
+        .grid-line {
+            position: absolute;
+            background: rgba(234, 88, 12, 0.04);
         }
     </style>
 </head>
@@ -63,7 +88,7 @@
         
         <div class="flex justify-between items-center bg-zinc-900/80 p-5 rounded-3xl border border-zinc-800/50 backdrop-blur-md relative">
             <div>
-                <p class="text-[10px] text-pink-500 font-black tracking-widest uppercase">Angola / Luanda</p>
+                <p class="text-[10px] text-orange-500 font-black tracking-widest uppercase">ElephantBet / Luanda</p>
                 <p id="clock" class="text-xl font-orbitron">00:00:00</p>
             </div>
 
@@ -78,18 +103,30 @@
             </div>
         </div>
 
-        <div class="neon-card p-8 text-center relative overflow-hidden">
+        <div class="neon-card p-6 text-center relative overflow-hidden">
+            
+            <div id="radar-screen" class="mb-5 flex items-center justify-center">
+                <div class="grid-line w-full h-[1px] top-1/3 left-0"></div>
+                <div class="grid-line w-full h-[1px] top-2/3 left-0"></div>
+                <div class="grid-line h-full w-[1px] left-1/3 top-0"></div>
+                <div class="grid-line h-full w-[1px] left-2/3 top-0"></div>
+                
+                <div id="rocket">🚀</div>
+                
+                <div id="radar-multiplier" class="text-5xl font-orbitron font-black text-zinc-800 select-none">1.00x</div>
+            </div>
+
             <div class="progress-bar mb-6">
                 <div id="loading-bar" class="progress-fill"></div>
             </div>
 
-            <div id="status" class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">IA Sistema em Espera</div>
-            <div id="timer" class="text-6xl font-orbitron mb-8 tracking-tighter text-white">--:--</div>
+            <div id="status" class="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">IA Sistema em Espera</div>
+            <div id="timer" class="text-6xl font-orbitron mb-6 tracking-tighter text-white">--:--</div>
 
-            <div class="grid grid-cols-2 gap-4 mb-8 py-5 border-y border-zinc-800/60">
+            <div class="grid grid-cols-2 gap-4 mb-6 py-4 border-y border-zinc-800/60">
                 <div class="text-left">
                     <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Assertividade</p>
-                    <p id="pct" class="text-2xl font-black text-pink-500">0%</p>
+                    <p id="pct" class="text-2xl font-black text-orange-500">0%</p>
                 </div>
                 <div class="text-right">
                     <p class="text-[9px] text-zinc-500 uppercase font-black mb-1">Alvo Previsto</p>
@@ -97,7 +134,7 @@
                 </div>
             </div>
 
-            <div class="mb-8 min-h-[40px]">
+            <div class="mb-6 min-h-[40px]">
                 <p id="dica" class="text-xs text-zinc-400 font-medium leading-relaxed italic">
                     "Aguardando carregamento do print para análise de ciclos SHA-512."
                 </p>
@@ -108,7 +145,7 @@
                 1. Selecionar Gráfico
             </button>
             
-            <button onclick="analisar()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-black py-5 rounded-2xl text-xl shadow-xl shadow-pink-900/20 active:scale-95 transition-all">
+            <button onclick="analisar()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-5 rounded-2xl text-xl shadow-xl shadow-orange-900/20 active:scale-95 transition-all">
                 2. Analisar com Super IA
             </button>
         </div>
@@ -120,85 +157,114 @@
     </div>
 
     <script>
-        // LINK DO BACKEND CONFIGURADO
+        // Trocar pelo teu domínio real do Render
         const API_URL = 'https://preditor-elite-backend-render-2026.onrender.com';
 
-        // Atualização do Relógio (Fuso Luanda)
         setInterval(() => {
             const options = { timeZone: 'Africa/Luanda', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             document.getElementById('clock').innerText = new Intl.DateTimeFormat('pt-PT', options).format(new Date());
         }, 1000);
 
-        // FUNÇÃO AUTOMÁTICA: Acorda o Render assim que abre o site
         async function acordarRender() {
             const dot = document.getElementById('render-status-dot');
             const text = document.getElementById('render-status-text');
-            
             text.innerText = "ACORDANDO...";
             text.className = "text-[8px] font-black uppercase tracking-wider text-yellow-500";
             dot.className = "w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_10px_#eab308] pulse-status mb-1";
-
             try {
-                // Faz uma chamada leve do tipo GET para a nova rota de saúde do servidor
                 const response = await fetch(`${API_URL}/health`);
                 if (response.ok) {
-                    // Se o servidor responder, fica Verde (Ativo)
                     dot.className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] mb-1";
                     text.innerText = "ONLINE";
                     text.className = "text-[8px] font-black uppercase tracking-wider text-green-500";
                 }
             } catch (error) {
-                console.error("Servidor ainda a carregar ou offline:", error);
+                console.error("Servidor offline:", error);
                 dot.className = "w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] pulse-status mb-1";
                 text.innerText = "DORMINDO";
                 text.className = "text-[8px] font-black uppercase tracking-wider text-red-500";
             }
         }
 
-        // Executa a função imediatamente ao carregar a página
         window.addEventListener('DOMContentLoaded', acordarRender);
+
+        // MOTOR SÌNCRONO DO FOGUETÃO 🚀
+        function executarFluxoVoo(alvoMaximo) {
+            const rocket = document.getElementById('rocket');
+            const display = document.getElementById('radar-multiplier');
+            
+            if (alvoMaximo <= 0) {
+                display.innerText = "ESPERAR";
+                display.className = "text-2xl font-orbitron font-black text-red-500";
+                rocket.style.display = "none";
+                return;
+            }
+
+            display.innerText = "READY";
+            display.className = "text-2xl font-orbitron font-black text-yellow-500";
+            rocket.style.display = "block";
+            rocket.style.left = "20px";
+            rocket.style.bottom = "20px";
+            rocket.style.transform = "rotate(45deg) scale(1)";
+
+            // Atraso de 2 segundos tático para sincronizar com o início real da ronda
+            setTimeout(() => {
+                display.className = "text-5xl font-orbitron font-black text-orange-500";
+                let currentMult = 1.00;
+                const startTime = Date.now();
+                
+                const flightInterval = setInterval(() => {
+                    const elapsed = (Date.now() - startTime) / 1000;
+                    currentMult = 1.00 + Math.pow(elapsed * 0.98, 1.25);
+                    
+                    if (currentMult >= alvoMaximo) {
+                        clearInterval(flightInterval);
+                        display.innerText = "💥 BOOM";
+                        display.className = "text-4xl font-orbitron font-black text-red-600";
+                        rocket.style.transform = "scale(1.9) rotate(45deg)";
+                        setTimeout(() => { rocket.style.display = "none"; }, 500);
+                    } else {
+                        display.innerText = currentMult.toFixed(2) + "x";
+                        
+                        let progress = (currentMult - 1) / (alvoMaximo - 1 || 1);
+                        let posX = 20 + (progress * 70); 
+                        let posY = 20 + (Math.sin(progress * Math.PI / 2) * 65);
+                        rocket.style.left = `${Math.min(posX, 85)}%`;
+                        rocket.style.bottom = `${Math.min(posY, 78)}%`;
+                    }
+                }, 45);
+            }, 2000);
+        }
 
         async function analisar() {
             const fileInput = document.getElementById('file');
             const file = fileInput.files[0];
-            
             if (!file) {
                 alert("Por favor, selecione uma imagem do histórico primeiro.");
                 return;
             }
 
-            // UI State - Processando
             document.getElementById('status').innerText = "Processando Padrões...";
             document.getElementById('loading-bar').style.width = "40%";
-            
             const formData = new FormData();
             formData.append('print', file);
 
             try {
-                const response = await fetch(`${API_URL}/analisar-fluxo`, {
-                    method: 'POST',
-                    body: formData
-                });
-
+                const response = await fetch(`${API_URL}/analisar-fluxo`, { method: 'POST', body: formData });
                 if (!response.ok) throw new Error("Erro no servidor");
-
                 const data = await response.json();
 
-                // Sucesso - Preencher dados
                 document.getElementById('loading-bar').style.width = "100%";
-                
-                // Formatar Timer para mostrar apenas HH:MM
                 const timeParts = data.timerRosa.split(':');
                 document.getElementById('timer').innerText = `${timeParts[0]}:${timeParts[1]}`;
                 
                 document.getElementById('pct').innerText = data.pct;
                 document.getElementById('banca').innerText = data.banca;
                 document.getElementById('alvo').innerText = data.alvo;
-                document.getElementById('status').innerText = data.status;
+                document.getElementById('status').innerText = data.status.toUpperCase();
                 document.getElementById('status').style.color = data.cor;
                 document.getElementById('dica').innerText = data.dica;
 
-                // Renderizar Histórico de Velas
                 const histDiv = document.getElementById('hist');
                 histDiv.innerHTML = '';
                 data.historico.forEach(v => {
@@ -209,24 +275,29 @@
                     histDiv.appendChild(chip);
                 });
 
-                // Como a requisição funcionou, garante que o sinal permanece verde
                 document.getElementById('render-status-dot').className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] mb-1";
                 document.getElementById('render-status-text').innerText = "ONLINE";
-                document.getElementById('render-status-text').className = "text-[8px] font-black uppercase tracking-wider text-green-500";
+
+                executarFluxoVoo(data.alvoNumerico);
 
                 setTimeout(() => { document.getElementById('loading-bar').style.width = "0%"; }, 2000);
-
             } catch (error) {
                 console.error(error);
-                alert("Erro ao conectar à IA. Verifique se o seu backend no Render está online (Live).");
+                alert("Erro ao conectar à IA.");
                 document.getElementById('status').innerText = "ERRO DE CONEXÃO";
                 document.getElementById('loading-bar').style.width = "0%";
-                
-                // Em caso de erro de conexão, o sinal volta para vermelho
                 document.getElementById('render-status-dot').className = "w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444] pulse-status mb-1";
                 document.getElementById('render-status-text').innerText = "DORMINDO";
-                document.getElementById('render-status-text').className = "text-[8px] font-black uppercase tracking-wider text-red-500";
             }
+        }
+
+        // REGISTO AUTOMÁTICO DO SERVICE WORKER (HABILITA PWA INSTALÁVEL)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker Registado com sucesso!', reg.scope))
+                    .catch(err => console.log('Falha ao registar o Service Worker:', err));
+            });
         }
     </script>
 </body>
